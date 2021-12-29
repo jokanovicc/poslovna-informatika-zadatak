@@ -5,6 +5,7 @@ import Home from "./pages/Home"
 import React,{Fragment} from "react";
 import PrenosNovca from "./pages/PrenosNovca";
 import Izvod from "./pages/Izvod";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
               </Route>
           </Routes>
         </Fragment>
+          <Footer/>
       </Router>
 
   );

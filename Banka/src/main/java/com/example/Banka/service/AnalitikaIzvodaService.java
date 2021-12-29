@@ -5,6 +5,7 @@ import com.example.Banka.model.Klijent;
 import com.example.Banka.model.Racun;
 import com.example.Banka.repository.AnalitikaIzvodaRepository;
 import com.example.Banka.web.dto.IzvodDTO;
+import com.example.Banka.web.dto.NalogZaPrenosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AnalitikaIzvodaService {
@@ -51,14 +49,13 @@ public class AnalitikaIzvodaService {
             List<String> lines = new ArrayList<String>();
 
             for (AnalitikaIzvoda analitikaIzvodaDTO : analitika.values()) {
-                String line = analitikaIzvodaDTO.getBrojStavke() + ";" + analitikaIzvodaDTO.getDuznik() + ";" + analitikaIzvodaDTO.getRacunDuznika() + ";" + analitikaIzvodaDTO.getRacunPrimaoca() + ";" + analitikaIzvodaDTO.getIznos() + ";" + analitikaIzvodaDTO.getHitno();
+                String line = analitikaIzvodaDTO.getBrojStavke() + ";" + analitikaIzvodaDTO.getDuznik() + ";" + analitikaIzvodaDTO.getRacunDuznika() + ";" + analitikaIzvodaDTO.getRacunPrimaoca() + ";" + analitikaIzvodaDTO.getIznos() + ";" + analitikaIzvodaDTO.getSvrhaPlacanja() + " ;RSD; " + analitikaIzvodaDTO.getVremePrenosa();
                 lines.add(line);
                 ret.put(analitikaIzvodaDTO.getBrojStavke(), analitikaIzvodaDTO);
 
             }
 
             Files.write(path, lines, Charset.forName("UTF-8"));
-            System.out.println(" 1 JEL STIGLO DOVDE?");
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -76,7 +73,7 @@ public class AnalitikaIzvodaService {
             List<String> lines = new ArrayList<String>();
 
             for (AnalitikaIzvoda analitikaizvoda102 : analitika.values()) {
-                String line = brojStavke + ";" + analitikaizvoda102.getDuznik() + ";" + analitikaizvoda102.getRacunDuznika() + ";" + analitikaizvoda102.getRacunPrimaoca() + ";" + analitikaizvoda102.getIznos() + ";" + analitikaizvoda102.getHitno() + ";" + analitikaizvoda102.getVremePrenosa();
+                String line = brojStavke + ";" + analitikaizvoda102.getDuznik() + ";" + analitikaizvoda102.getRacunDuznika() + ";" + analitikaizvoda102.getRacunPrimaoca() + ";" + analitikaizvoda102.getIznos() + ";" + "RSD" + ";" + analitikaizvoda102.getHitno() + ";" + analitikaizvoda102.getVremePrenosa();
                 lines.add(line);
                 ret.put(analitikaizvoda102.getBrojStavke(), analitikaizvoda102);
 
@@ -112,8 +109,56 @@ public class AnalitikaIzvodaService {
 
     }
 
+
+    public void dtoToModel(NalogZaPrenosDTO nalogZaPrenosDTO, AnalitikaIzvoda analitikaIzvoda){
+        Random r = new Random();
+        int low = 10;
+        int high = 1000;
+        int result = r.nextInt(high-low) + low;
+        analitikaIzvoda.setBrojStavke(result);
+        analitikaIzvoda.setDuznik(nalogZaPrenosDTO.getUplatilac());
+        analitikaIzvoda.setPrimalac("primalac opisan po računu");
+        analitikaIzvoda.setHitno(nalogZaPrenosDTO.isHitno());
+        analitikaIzvoda.setModel(98);
+        analitikaIzvoda.setPozivNaBroj("transakcija građana");
+        analitikaIzvoda.setIznos(nalogZaPrenosDTO.getIznos());
+        analitikaIzvoda.setVrstaPlacanja("transkacija po nalogu građana");
+        analitikaIzvoda.setRacunDuznika(nalogZaPrenosDTO.getBrojRacunaUplatioca());
+        analitikaIzvoda.setRacunPrimaoca(nalogZaPrenosDTO.getBrojRacunaPrimaoca());
+        analitikaIzvoda.setVremePrenosa(LocalDate.now());
+        analitikaIzvoda.setSvrhaPlacanja(nalogZaPrenosDTO.getSvrhaPlacanja());
+
+    }
+
     public List<AnalitikaIzvoda> getAnalitikaIzvodaBetweenDates(LocalDate startDate, LocalDate endDate, Racun racun){
         return analitikaIzvodaRepository.getAnalitikaIzvodaBetweenDates(startDate,endDate,racun);
+    }
+
+
+    public void caseRTGS(AnalitikaIzvoda analitikaIzvoda){
+        System.out.println("-------REALTIME MT102-----------");
+        Map<Integer, AnalitikaIzvoda> ret = new HashMap<>();
+        List<AnalitikaIzvoda> analitike = findAll();
+        ret.put(analitikaIzvoda.getBrojStavke(),analitikaIzvoda);
+        saveToFile103(ret);
+    }
+
+
+    public void caseClearing(AnalitikaIzvoda analitikaIzvoda){
+        Random r = new Random();
+        int low = 10;
+        int high = 1000;
+        int result = r.nextInt(high-low) + low;
+        Map<Integer, AnalitikaIzvoda> ret2 = new HashMap<>();
+        List<AnalitikaIzvoda> analitike2 = findAll();
+        for(AnalitikaIzvoda analitikaIzvoda1: analitike2){
+            if(analitikaIzvoda1.getHitno()==false || analitikaIzvoda1.getIznos() < 300000 && analitikaIzvoda1.getVremePrenosa() == analitikaIzvoda.getVremePrenosa())
+                ret2.put(analitikaIzvoda1.getBrojStavke(),analitikaIzvoda1);
+
+        }
+        ret2.put(analitikaIzvoda.getBrojStavke(),analitikaIzvoda);
+        saveToFile102(ret2,result);
+
     }
 
 

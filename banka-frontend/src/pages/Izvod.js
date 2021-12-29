@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Form, Row, Toast} from "react-bootstrap";
 import axios from "axios";
 import MaterialTable from "material-table";
 import {useParams} from "react-router-dom";
 import {NalogZaPrenosService} from "../services/NalogZaPrenosService";
 import {Autocomplete, TextField} from "@mui/material";
+import jsPDF from "jspdf";
+import 'jspdf-autotable'
 
 const Izvod = (props) => {
     const[analitike,setAnalitike] = useState([]);
@@ -18,8 +20,8 @@ const Izvod = (props) => {
 
     const columns = [
         {title:"Broj stavke",field:"brojStavke"},
-        {title:"Račun dužnika",field:"racunDuznika"},
-        {title:"Račun primaoca",field:"racunPrimaoca"},
+        {title:"Racun dužnika",field:"racunDuznika"},
+        {title:"Racun primaoca",field:"racunPrimaoca"},
         {title:"Iznos",field:"iznos"},
         {title:"Svrha plaćanja",field:"svrhaPlacanja"},
         {title:"Datum prenosa",field:"vremePrenosa"},
@@ -68,24 +70,37 @@ const Izvod = (props) => {
             console.log(datum);
             const response = await axios.post("http://localhost:8080/api/analitike-izvoda/izvod-racuna",datum)
             console.log(response.data);
-            setAnalitike(response.data)
+            setAnalitike(response.data);
         }catch (error){
             console.error(`Greška prilikom dobavljanja analitika : ${error}`);
         }
+    }
+
+    const downloadPdf = () => {
+        const doc = new jsPDF();
+        let text = 'Analitika Izvoda od ' + datum.startDate + ' do ' + datum.endDate
+        doc.text(text,20,10);
+        doc.autoTable({
+            theme:"grid",
+            columns:columns.map(col => ({...col,dataKey:col.field})),
+            body: analitike
+        })
+        doc.save('izvod.pdf');
+
     }
 
 
 
     return (
         <Container>
-            <Card style={{ width: '69rem', marginTop: '50px',marginBottom:'50px',padding:'50px'}} className={"border border-dark bg-dark text-white"}>
+            <Card style={{ width: '69rem', marginTop: '50px',marginBottom:'50px',padding:'50px'}}>
                 <Row>
                     <Col md={{ span: 6, offset: 3 }} style={{ textAlign: "center" }}>
-                        <h3>Analitike izvoda</h3>
+                        <h2>Analitike izvoda</h2>
                         <hr/>
                         <Form>
                             <Form.Group>
-                                <Form.Label>Почетни датум</Form.Label>
+                                <Form.Label>Početni datum</Form.Label>
                                 <Form.Control
                                     max="2022-12-12"
                                     min="2019-12-12"
@@ -97,7 +112,7 @@ const Izvod = (props) => {
                                 />
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label>Завршни датум</Form.Label>
+                                <Form.Label>Završni datum</Form.Label>
                                 <Form.Control
                                     max="2022-12-12"
                                     min="2019-12-12"
@@ -110,7 +125,7 @@ const Izvod = (props) => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>Korisnik id</Form.Label>
+                                <Form.Label>Klijent</Form.Label>
                                 <Autocomplete
                                     color={"white"}
                                     disablePortal
@@ -118,7 +133,7 @@ const Izvod = (props) => {
                                     options={klijenti}
                                     getOptionLabel={option => option.ime}
                                     onChange={(event, value) =>handleKlijent(value.id)}
-                                    renderInput={(params) => <TextField {...params} label="Račun" />}
+                                    renderInput={(params) => <TextField {...params} label="Klijent" />}
                                 />
                             </Form.Group>
 
@@ -134,7 +149,20 @@ const Izvod = (props) => {
 
             {analitike.length > 0 &&
             <Card style={{ width: '69rem', margin: 'auto',textAlign:"center", marginBottom:"50px"}} className={"border border-dark bg-dark text-white"}>
-                <MaterialTable columns={columns} data={analitike}/>
+                <MaterialTable columns={columns}
+                               title={"Izvo računa"}
+                               data={analitike}
+                               actions={[
+                                   {
+                                       icon: () => <Button>PDF</Button>,
+                                       tooltip: "Export to pdf",
+                                       onClick: () => downloadPdf(),
+                                       isFreeAction: true
+                                   }
+                               ]}
+
+
+                />
             </Card>
             }
         </Container>

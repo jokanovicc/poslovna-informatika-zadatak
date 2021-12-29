@@ -26,3 +26,5 @@ values (570, '2021-12-29', 10000, 10000, 0, 10000, 0, 1, 3);
 insert into analitika_izvoda(broj_stavke, duznik, hitno, iznos, model, poziv_na_broj, primalac, racun_duznika, racun_primaoca, svrha_placanja, vreme_prenosa, vrsta_placanja, dnevno_stanje_id) values
     (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-29', 'transkacija po nalogu građana', 1);
 
+insert into analitika_izvoda(broj_stavke, duznik, hitno, iznos, model, poziv_na_broj, primalac, racun_duznika, racun_primaoca, svrha_placanja, vreme_prenosa, vrsta_placanja, dnevno_stanje_id) values
+    (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-29', 'transkacija po nalogu građana', 2);

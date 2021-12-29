@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 const NavBar = () => {
     return (
         <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="#home">Б А Н К А</Navbar.Brand>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                    z a p o s l e n i
-                </Navbar.Text>
-            </Navbar.Collapse>
+            <Container>
+                <Navbar.Brand href="/">Б А Н К А</Navbar.Brand>
+                <Nav className="me-auto">
+                    <Nav.Link href="/prenos-novca">Prenos novca</Nav.Link>
+                    <Nav.Link href="/izvod">Analitika</Nav.Link>
+                </Nav>
+            </Container>
         </Navbar>)
 };
 
