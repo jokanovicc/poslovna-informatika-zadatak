@@ -1,7 +1,10 @@
 package com.example.Banka.service;
 
 import com.example.Banka.model.AnalitikaIzvoda;
+import com.example.Banka.model.Klijent;
+import com.example.Banka.model.Racun;
 import com.example.Banka.repository.AnalitikaIzvodaRepository;
+import com.example.Banka.web.dto.IzvodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +111,11 @@ public class AnalitikaIzvodaService {
 
 
     }
+
+    public List<AnalitikaIzvoda> getAnalitikaIzvodaBetweenDates(LocalDate startDate, LocalDate endDate, Racun racun){
+        return analitikaIzvodaRepository.getAnalitikaIzvodaBetweenDates(startDate,endDate,racun);
+    }
+
 
 
 }

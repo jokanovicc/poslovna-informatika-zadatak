@@ -1,6 +1,7 @@
 import {Col, Row, Container, Image, Button, Nav} from "react-bootstrap";
 import React from "react";
 import {Link} from "react-router-dom";
+import Izvod from "./Izvod";
 
 
 const Home = () => {
@@ -11,7 +12,7 @@ const Home = () => {
                 <Button variant="success" as={Link} to="/prenos-novca"  size="lg">
                     Пренос новца
                 </Button>
-                <Button variant="success" size="lg">
+                <Button variant="success" as={Link} to="/izvod" size="lg">
                     Аналитика извода
                 </Button>
             </div>

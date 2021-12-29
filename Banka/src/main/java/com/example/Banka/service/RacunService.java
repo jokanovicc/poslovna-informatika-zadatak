@@ -1,5 +1,6 @@
 package com.example.Banka.service;
 
+import com.example.Banka.model.Klijent;
 import com.example.Banka.model.Racun;
 import com.example.Banka.repository.RacunRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ public class RacunService {
 
     public List<Racun> findAll(){
         return racunRepository.findAll();
+    }
+
+    public Racun getByKlijent(Klijent klijent){
+        return racunRepository.findByKlijent(klijent);
     }
 
 

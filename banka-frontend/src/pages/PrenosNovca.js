@@ -73,7 +73,6 @@ const PrenosNovca = (props) => {
                 'Nalog je uspešno poslat!',
                 'success'
             )
-            window.location.reload(true);
 
         }else{
             Swal.fire({

@@ -2,26 +2,27 @@ package com.example.Banka.web;
 
 import com.example.Banka.model.AnalitikaIzvoda;
 import com.example.Banka.model.DnevnoStanje;
+import com.example.Banka.model.Klijent;
 import com.example.Banka.model.Racun;
 import com.example.Banka.service.AnalitikaIzvodaService;
 import com.example.Banka.service.DnevnoStanjeService;
+import com.example.Banka.service.KlijentService;
 import com.example.Banka.service.RacunService;
+import com.example.Banka.web.dto.IzvodDTO;
 import com.example.Banka.web.dto.NalogZaPrenosDTO;
+import com.example.Banka.web.dto.UpitIzvoda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/analitike-izvoda")
-public class PrenosNovcaController {
+public class AnalitikaIzvodaController {
 
 
 
@@ -33,6 +34,11 @@ public class PrenosNovcaController {
 
     @Autowired
     private DnevnoStanjeService dnevnoStanjeService;
+
+    @Autowired
+    private KlijentService klijentService;
+
+
 
 
     @PostMapping(value = "nalog-za-prenos")
@@ -172,6 +178,40 @@ public class PrenosNovcaController {
         return new ResponseEntity<Void>(HttpStatus.OK);
 
     }
+
+
+    @PostMapping("/izvod-racuna")
+    private List<IzvodDTO> getIzvodByDates(@RequestBody UpitIzvoda upitIzvoda){
+
+        Klijent klijent = klijentService.findOne(upitIzvoda.getId());
+        Racun racun = racunService.getByKlijent(klijent);
+
+        List<IzvodDTO> izvodDTOS = new ArrayList<>();
+
+        for (AnalitikaIzvoda a: analitikaIzvodaService.findAll()) {
+            for (DnevnoStanje dnevnoStanje:dnevnoStanjeService.findAll()){
+                if(a.getDnevnoStanje().equals(dnevnoStanje)){
+                    if(dnevnoStanje.getRacunPrivatnihLica().equals(racun)){
+                        if(dnevnoStanje.getDatumIzvoda().isAfter(upitIzvoda.getStartDate()) && dnevnoStanje.getDatumIzvoda().isBefore(upitIzvoda.getEndDate())){
+                            izvodDTOS.add(new IzvodDTO(a));
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        return izvodDTOS;
+
+
+
+    }
+
+
+
+
+
 
 
 }

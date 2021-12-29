@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class DnevnoStanjeService {
@@ -20,5 +21,9 @@ public class DnevnoStanjeService {
 
     public DnevnoStanje findByRacun(String racun, LocalDate date){
         return dnevnoStanjeRepository.findByRacunPrivatnihLicaBrojRacunaAndAndDatumIzvoda(racun,date);
+    }
+
+    public List<DnevnoStanje> findAll(){
+        return dnevnoStanjeRepository.findAll();
     }
 }
