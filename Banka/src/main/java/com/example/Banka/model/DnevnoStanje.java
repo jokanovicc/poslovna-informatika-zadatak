@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -37,6 +39,8 @@ public class DnevnoStanje {
     @JsonIgnoreProperties(value = { "dnevnoStanjes", "banka", "klijent" }, allowSetters = true)
     private Racun racunPrivatnihLica;
 
+    @OneToMany(mappedBy = "dnevnoStanje")
+    private Set<AnalitikaIzvoda> analitikaIzvodas = new HashSet<>();
 
     @Version
     private Integer version;

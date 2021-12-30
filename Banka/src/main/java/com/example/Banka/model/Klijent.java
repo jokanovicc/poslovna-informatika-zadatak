@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,6 +30,9 @@ public class Klijent {
     private LocalDate datumRodjenja;
 
     private String adresa;
+
+    @OneToMany(mappedBy = "klijent")
+    private Set<Racun> racunPrivatnihLicas = new HashSet<>();
 
 
 

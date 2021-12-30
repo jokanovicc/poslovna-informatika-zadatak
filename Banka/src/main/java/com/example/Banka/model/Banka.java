@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -24,6 +26,9 @@ public class Banka {
     private String sifraBanke;
 
     private String adresa;
+
+    @OneToMany(mappedBy = "banka")
+    private Set<Racun> racunPrivatnihLicas = new HashSet<>();
 
 
 

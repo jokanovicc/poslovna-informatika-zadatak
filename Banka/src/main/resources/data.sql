@@ -14,17 +14,17 @@ insert into racun(broj_racuna,datum_otvaranja,banka_id,klijent_id) values ('4400
 
 
 insert into dnevno_stanje(broj_izvoda, datum_izvoda, novo_stanje, prethodno_stanje, promet_na_teret, prometukorist, rezervisano, version, racun_privatnih_lica_id)
-values (900, '2021-12-29', -10000, -10000, 0, 1000, 0, 1, 1);
+values (900, '2021-12-28', -10000, -10000, 0, 1000, 0, 1, 1);
 
 
 insert into dnevno_stanje( broj_izvoda, datum_izvoda, novo_stanje, prethodno_stanje, promet_na_teret, prometukorist, rezervisano, version, racun_privatnih_lica_id)
-values (570, '2021-12-29', 10000, 10000, 0, 10000, 0, 1, 3);
+values (570, '2021-12-28', 10000, 10000, 0, 10000, 0, 1, 3);
 
 
 
 
 insert into analitika_izvoda(broj_stavke, duznik, hitno, iznos, model, poziv_na_broj, primalac, racun_duznika, racun_primaoca, svrha_placanja, vreme_prenosa, vrsta_placanja, dnevno_stanje_id) values
-    (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-29', 'transkacija po nalogu građana', 1);
+    (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-28', 'transkacija po nalogu građana', 1);
 
 insert into analitika_izvoda(broj_stavke, duznik, hitno, iznos, model, poziv_na_broj, primalac, racun_duznika, racun_primaoca, svrha_placanja, vreme_prenosa, vrsta_placanja, dnevno_stanje_id) values
-    (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-29', 'transkacija po nalogu građana', 2);
+    (900, 'Jovan Markovic', false, 10000, '98', 'transakcija građana', 'primalac opisan po računu', '9874-0000-6000-4200', '4400-9871-5400-1200', 'slanje novca osiguranju', '2021-12-28', 'transkacija po nalogu građana', 2);

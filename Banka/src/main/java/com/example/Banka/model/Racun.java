@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -21,6 +23,9 @@ public class Racun {
     private String brojRacuna;
 
     private LocalDate datumOtvaranja;
+
+    @OneToMany(mappedBy = "racunPrivatnihLica")
+    private Set<DnevnoStanje> dnevnoStanjes = new HashSet<>();
 
     @ManyToOne
     private Banka banka;

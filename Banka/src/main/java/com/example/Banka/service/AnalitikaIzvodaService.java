@@ -49,7 +49,7 @@ public class AnalitikaIzvodaService {
             List<String> lines = new ArrayList<String>();
 
             for (AnalitikaIzvoda analitikaIzvodaDTO : analitika.values()) {
-                String line = analitikaIzvodaDTO.getBrojStavke() + ";" + analitikaIzvodaDTO.getDuznik() + ";" + analitikaIzvodaDTO.getRacunDuznika() + ";" + analitikaIzvodaDTO.getRacunPrimaoca() + ";" + analitikaIzvodaDTO.getIznos() + ";" + analitikaIzvodaDTO.getSvrhaPlacanja() + " ;RSD; " + analitikaIzvodaDTO.getVremePrenosa();
+                String line = analitikaIzvodaDTO.getBrojStavke() + ";" + analitikaIzvodaDTO.getDuznik() + ";" + analitikaIzvodaDTO.getRacunDuznika() + ";" + analitikaIzvodaDTO.getRacunPrimaoca() + ";" + analitikaIzvodaDTO.getIznos() + ";" + analitikaIzvodaDTO.getSvrhaPlacanja() + ";RSD;" + analitikaIzvodaDTO.getVremePrenosa();
                 lines.add(line);
                 ret.put(analitikaIzvodaDTO.getBrojStavke(), analitikaIzvodaDTO);
 
@@ -128,10 +128,6 @@ public class AnalitikaIzvodaService {
         analitikaIzvoda.setVremePrenosa(LocalDate.now());
         analitikaIzvoda.setSvrhaPlacanja(nalogZaPrenosDTO.getSvrhaPlacanja());
 
-    }
-
-    public List<AnalitikaIzvoda> getAnalitikaIzvodaBetweenDates(LocalDate startDate, LocalDate endDate, Racun racun){
-        return analitikaIzvodaRepository.getAnalitikaIzvodaBetweenDates(startDate,endDate,racun);
     }
 
 

@@ -7,6 +7,7 @@ import {NalogZaPrenosService} from "../services/NalogZaPrenosService";
 import {Autocomplete, TextField} from "@mui/material";
 import jsPDF from "jspdf";
 import 'jspdf-autotable'
+import {IzvodService} from "../services/IzvodService";
 
 const Izvod = (props) => {
     const[analitike,setAnalitike] = useState([]);
@@ -23,7 +24,7 @@ const Izvod = (props) => {
         {title:"Racun dužnika",field:"racunDuznika"},
         {title:"Racun primaoca",field:"racunPrimaoca"},
         {title:"Iznos",field:"iznos"},
-        {title:"Svrha plaćanja",field:"svrhaPlacanja"},
+        {title:"Svrha",field:"svrhaPlacanja"},
         {title:"Datum prenosa",field:"vremePrenosa"},
 
 
@@ -35,20 +36,15 @@ const Izvod = (props) => {
 
     const[klijenti,setKlijenti] = useState([]);
 
-    // Funkcija koja prima naziv polja koje će se ažurirati, a potom i događaj koji je doveo do tog ažuriranja
-    // Iz događaja je moguće izvući novu vrednost polja
+
     const handleFormInputChange = (name) => (event) => {
         const val = event.target.value;
-
-        // ... - Destructuring assignment - omogućuje raspakivanje vrednosti objekata ili nizova
-        // setCredentails će zameniti stanje novim objektom koji uzima vrednosti iz prethodnog stanja kredencijala
-        // ali sa ažuriranom vrednošću [name] polja
         setDatum({ ...datum, [name]: val });
     };
 
     async function fetchKlijenti(){
         try {
-            const response = await axios.get("http://localhost:8080/api/klijenti")
+            const response = await IzvodService.searchKlijenti();
             setKlijenti(response.data);
         }catch (error){
             console.error(`Greška prilikom dobavljanja korisnika: ${error}`);
@@ -68,8 +64,7 @@ const Izvod = (props) => {
     async function fetchIzvod(){
         try{
             console.log(datum);
-            const response = await axios.post("http://localhost:8080/api/analitike-izvoda/izvod-racuna",datum)
-            console.log(response.data);
+            const response = await IzvodService.searchIzvod(datum);
             setAnalitike(response.data);
         }catch (error){
             console.error(`Greška prilikom dobavljanja analitika : ${error}`);
@@ -150,7 +145,7 @@ const Izvod = (props) => {
             {analitike.length > 0 &&
             <Card style={{ width: '69rem', margin: 'auto',textAlign:"center", marginBottom:"50px"}} className={"border border-dark bg-dark text-white"}>
                 <MaterialTable columns={columns}
-                               title={"Izvo računa"}
+                               title={"Izvod računa"}
                                data={analitike}
                                actions={[
                                    {
