@@ -132,7 +132,6 @@ public class AnalitikaIzvodaService {
 
 
     public void caseRTGS(AnalitikaIzvoda analitikaIzvoda){
-        System.out.println("-------REALTIME MT102-----------");
         Map<Integer, AnalitikaIzvoda> ret = new HashMap<>();
         List<AnalitikaIzvoda> analitike = findAll();
         ret.put(analitikaIzvoda.getBrojStavke(),analitikaIzvoda);

@@ -47,28 +47,29 @@ public class AnalitikaIzvodaController {
         analitikaIzvodaService.dtoToModel(nalogZaPrenosDTO,analitikaIzvoda);
         if(racunService.poklapanjeBanki(nalogZaPrenosDTO.getBrojRacunaPrimaoca(),nalogZaPrenosDTO.getBrojRacunaUplatioca())){
             System.out.println("Nema ni RTGS ni Kliringa, novac je prenesen a ni porukica");
+            AnalitikaIzvoda analitikaIzvodaPrimaoca = analitikaIzvodaService.makeAnalitikaIzvodaPrimaoca(analitikaIzvoda);
+            DnevnoStanje dnevnoStanjePrimaoca =dnevnoStanjeService.findByRacun(analitikaIzvoda.getRacunPrimaoca(),LocalDate.now());
+            Racun racunPrimaoca = racunService.findByRacunString(analitikaIzvoda.getRacunPrimaoca());
+            dnevnoStanjeService.makeDnevnoStanjePrimaoca(dnevnoStanjePrimaoca,racunPrimaoca,analitikaIzvodaPrimaoca);
+            analitikaIzvodaService.saveAnalitika(analitikaIzvodaPrimaoca);
+
         }else {
             System.out.println("Različite banke - RTGS ili Kliring");
+
             //CASE 1 - RTGS
             if(nalogZaPrenosDTO.isHitno() || nalogZaPrenosDTO.getIznos() > 300000){
+                System.out.println("-------RTGS MT103-----------");
                 analitikaIzvodaService.caseRTGS(analitikaIzvoda);
             }else{
-                System.out.println("-------KLIRING MT103-----------");
+                System.out.println("-------KLIRING MT102-----------");
                 analitikaIzvodaService.caseClearing(analitikaIzvoda);
             }
         }
-        AnalitikaIzvoda analitikaIzvodaPrimaoca = analitikaIzvodaService.makeAnalitikaIzvodaPrimaoca(analitikaIzvoda);
         //DNEVNO STANJE UPLATIOCA
         DnevnoStanje dnevnoStanje =dnevnoStanjeService.findByRacun(analitikaIzvoda.getRacunDuznika(),LocalDate.now());
         Racun racunKlijenta = racunService.findByRacunString(analitikaIzvoda.getRacunDuznika());
         dnevnoStanjeService.makeDnevnoStanjePosaljioca(dnevnoStanje,racunKlijenta,analitikaIzvoda);
         //////////////////////////////////////////
-        //DNEVNO STANJE PRIMAOCA
-        DnevnoStanje dnevnoStanjePrimaoca =dnevnoStanjeService.findByRacun(analitikaIzvoda.getRacunPrimaoca(),LocalDate.now());
-        Racun racunPrimaoca = racunService.findByRacunString(analitikaIzvoda.getRacunPrimaoca());
-        dnevnoStanjeService.makeDnevnoStanjePrimaoca(dnevnoStanjePrimaoca,racunPrimaoca,analitikaIzvodaPrimaoca);
-        //////////////////////////////////////////
-        analitikaIzvodaService.saveAnalitika(analitikaIzvodaPrimaoca);
         analitikaIzvodaService.saveAnalitika(analitikaIzvoda);
         return new ResponseEntity<Void>(HttpStatus.OK);
 
